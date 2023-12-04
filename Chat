@@ -1,0 +1,235 @@
+using System;
+
+public class Program
+{
+    public static void Main()
+    {
+        ICanal whatsAppAluno = new WhatsApp();
+        ICanal instaAluno = new Instagram();
+        ICanal teleAluno = new Telegram();
+        ICanal faceAluno = new Facebook();
+
+        MensagemBasica mensagem = new MensagemBasica
+        {
+            DataEnvio = DateTime.Now,
+            Mensagem = "Olá",
+            Arquivo = "Festa.mp4"
+        };
+
+        Video mensagemVideo = new Video
+        {
+            DataEnvio = DateTime.Now,
+            Mensagem = "Olá - Mensagem de vídeo: ",
+            Arquivo = "Férias.mp4",
+            Formato = TiposDeArquivo.MP4,
+            Duracao = 40
+        };
+
+        Foto mensagemVisual = new Foto
+        {
+            Mensagem = "Olá - Anexo de Imagem: Foto",
+            Arquivo = "Imagem.png",
+            Formato = TiposDeArquivo.PNG
+        };
+
+        Arquivo mensagemAnexo = new Arquivo
+        {
+            Mensagem = "Olá - Anexo de Arquivo: ",
+            Arquivo = "Anexo.PDF",
+            Formato = TiposDeArquivo.PDF
+        };
+
+        
+
+        // Enviando mensagem básica
+        whatsAppAluno.EnviarMensagem("+5511954380386", mensagem);
+        Console.WriteLine();
+        instaAluno.EnviarMensagem("@renatinho", mensagem);
+        Console.WriteLine();
+        teleAluno.EnviarMensagem("@renatinho - +5511954380386", mensagem);
+        Console.WriteLine();
+        faceAluno.EnviarMensagem("Renato do Grau", mensagem);
+        Console.WriteLine();
+
+        // Enviando mensagem de vídeo
+        whatsAppAluno.EnviarMensagem("+5511954380386", mensagemVideo);
+        Console.WriteLine();
+        instaAluno.EnviarMensagem("@renatinho", mensagemVideo);
+        Console.WriteLine();
+        teleAluno.EnviarMensagem("@renatinho", mensagemVideo);
+        Console.WriteLine();
+        faceAluno.EnviarMensagem("Renato do Grau", mensagemVideo);
+        Console.WriteLine();
+
+        // Enviando mensagem de imagem
+         whatsAppAluno.EnviarMensagem("+5511954380386", mensagemVisual);
+         Console.WriteLine();
+         instaAluno.EnviarMensagem("@renatinho", mensagemVisual);
+         Console.WriteLine();
+         teleAluno.EnviarMensagem("@renatinho - +5511954380386", mensagemVisual);
+        Console.WriteLine();
+        faceAluno.EnviarMensagem("Renato do Grau", mensagemVisual);
+        Console.WriteLine();
+
+        // Enviando mensagem de anexo
+        whatsAppAluno.EnviarMensagem("+5511954380386", mensagemAnexo);
+         Console.WriteLine();
+         instaAluno.EnviarMensagem("@renatinho", mensagemAnexo);
+         Console.WriteLine();
+         teleAluno.EnviarMensagem("@renatinho - +5511954380386", mensagemAnexo);
+        Console.WriteLine();
+        faceAluno.EnviarMensagem("Renato do Grau", mensagemAnexo);
+        Console.WriteLine();
+
+
+       
+
+        MensagemMultimidia mensagemRenato = mensagemVideo;
+        mensagemRenato.Mensagem = "Olá, Renato!";
+
+        ICanal facebook = new Facebook();
+
+        
+
+        ICanal canal = Factory.Create("facebook");
+        ICanal canall = Factory.Create("telegram");
+    }
+}
+
+public enum TiposDeArquivo
+{
+    MP4,
+    PDF,
+    PNG
+}
+
+public static class Factory
+{
+    public static ICanal Create(string canal)
+    {
+        switch (canal.ToLower())
+        {
+            case "whatsapp":
+                return new WhatsApp();
+            case "facebook":
+                return new Facebook();
+            case "telegram":
+                return new Telegram();
+            default:
+                return null;
+        }
+    }
+}
+
+public interface ICanal
+{
+    void EnviarMensagem(string destinatario, MensagemBasica mensagem);
+    void EnviarMensagem(string destinatario, Video mensagem);
+    void EnviarMensagem(string destinatario, Foto mensagem);
+    void EnviarMensagem(string destinatario, Arquivo mensagem);
+    
+}
+
+public abstract class CanaisMensagem : ICanal
+{
+    protected abstract string Canal { get; }
+
+    public void EnviarMensagem(string destinatario, MensagemBasica mensagem)
+    {
+        Console.WriteLine($"Mensagem básica enviada pelo canal: {Canal}");
+        Console.WriteLine($"Destinatário: {destinatario}");
+        Console.WriteLine($"Mensagem: {mensagem.Mensagem}");
+        Console.WriteLine($"Data Envio: {mensagem.DataEnvio}");
+        Console.WriteLine($"Arquivo: {mensagem.Arquivo}");
+    }
+
+    public void EnviarMensagem(string destinatario, Foto mensagem)
+    {
+        Console.WriteLine($"Mensagem foto enviada pelo canal: {Canal}");
+        Console.WriteLine($"Destinatário: {destinatario}");
+        Console.WriteLine($"Mensagem: {mensagem.Mensagem}");
+        Console.WriteLine($"Data Envio: {mensagem.DataEnvio}");
+        Console.WriteLine($"Arquivo: {mensagem.Arquivo}");
+        Console.WriteLine($"Tipo Arquivo: {mensagem.Formato}");
+    }
+
+    public void EnviarMensagem(string destinatario, MensagemMultimidia mensagem)
+    {
+        Console.WriteLine($"Mensagem multimídia enviada pelo canal: {Canal}");
+        Console.WriteLine($"Destinatário: {destinatario}");
+        Console.WriteLine($"Mensagem: {mensagem.Mensagem}");
+        Console.WriteLine($"Data Envio: {mensagem.DataEnvio}");
+        Console.WriteLine($"Arquivo: {mensagem.Arquivo}");
+        Console.WriteLine($"Tipo Arquivo: {mensagem.Formato}");
+    }
+
+    public void EnviarMensagem(string destinatario, Video mensagem)
+    {
+        Console.WriteLine($"Mensagem vídeo enviada pelo canal: {Canal}");
+        Console.WriteLine($"Destinatário: {destinatario}");
+        Console.WriteLine($"Mensagem: {mensagem.Mensagem}");
+        Console.WriteLine($"Data Envio: {mensagem.DataEnvio}");
+        Console.WriteLine($"Arquivo: {mensagem.Arquivo}");
+        Console.WriteLine($"Tipo Arquivo: {mensagem.Formato}");
+        Console.WriteLine($"Duração: {mensagem.Duracao}");
+    }
+
+    public void EnviarMensagem(string destinatario, Arquivo mensagem)
+    {
+        Console.WriteLine($"Mensagem arquivo enviada pelo canal: {Canal}");
+        Console.WriteLine($"Destinatário: {destinatario}");
+        Console.WriteLine($"Mensagem: {mensagem.Mensagem}");
+        Console.WriteLine($"Data Envio: {mensagem.DataEnvio}");
+        Console.WriteLine($"Arquivo: {mensagem.Arquivo}");
+        Console.WriteLine($"Tipo Arquivo: {mensagem.Formato}");
+    }
+
+}
+
+public class WhatsApp : CanaisMensagem, ICanal
+{
+    protected override string Canal => "WhatsApp";
+}
+
+public class Telegram : CanaisMensagem, ICanal
+{
+    protected override string Canal => "Telegram";
+}
+
+public class Instagram : CanaisMensagem, ICanal
+{
+    protected override string Canal => "Instagram";
+}
+
+public class Facebook : CanaisMensagem, ICanal
+{
+    protected override string Canal => "Facebook";
+}
+
+public class MensagemBasica
+{
+    public string Mensagem { get; set; }
+    public DateTime DataEnvio { get; set;} 
+    public string Arquivo {get; set;}
+}
+
+public class MensagemMultimidia : MensagemBasica
+{
+    public string Arquivob { get; set; }
+    public TiposDeArquivo Formato { get; set; }
+}
+
+public class Video : MensagemMultimidia
+{
+    public int Duracao { get; set; }
+}
+
+public class Foto : MensagemMultimidia
+{
+    // Propriedade específica para a classe Foto, se necessário
+}
+
+public class Arquivo : MensagemMultimidia
+{
+    public string Anexo { get; set; }
+}
